@@ -1,13 +1,18 @@
 {
-  "name": "wmax-vanilla-web",
-  "version": "1.0.0",
-  "main": "index.js",
-  "license": "MIT",
-  "devDependencies": {
-    "@types/node": "^18.11.17",
-    "autoprefixer": "^10.4.13",
-    "postcss": "^8.4.20",
-    "sass": "^1.57.0",
-    "tailwindcss": "^3.2.4"
-  }
+    "name": "wmax-vanilla-web",
+    "version": "1.0.0",
+    "main": "index.js",
+    "license": "MIT",
+    "devDependencies": {
+        "@types/node": "^18.11.17",
+        "autoprefixer": "^10.4.13",
+        "cssnano": "^5.1.14",
+        "gulp": "^4.0.2",
+        "gulp-postcss": "^9.0.1",
+        "gulp-sass": "^5.1.0",
+        "postcss": "^8.4.20",
+        "sass": "^1.57.0",
+        "tailwindcss": "^3.2.4",
+        "typescript": "^4.9.4"
+    }
 }
