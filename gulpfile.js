@@ -5,6 +5,14 @@ const autoprefixer = require('autoprefixer');
 const cssnano = require('cssnano');
 const sass = require('gulp-sass')(require('sass'));
 
+var paths = {
+    pages: ["src/*.html"],
+};
+
+gulp.task("copy-html", function () {
+    return gulp.src(paths.pages).pipe(gulp.dest("dist"));
+});
+
 // Run:
 // gulp sass
 // Complies sass only once
