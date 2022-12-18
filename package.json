@@ -1,0 +1,13 @@
+{
+  "name": "wmax-vanilla-web",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^18.11.17",
+    "autoprefixer": "^10.4.13",
+    "postcss": "^8.4.20",
+    "sass": "^1.57.0",
+    "tailwindcss": "^3.2.4"
+  }
+}
