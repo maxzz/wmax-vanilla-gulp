@@ -4,17 +4,22 @@ const tailwindcss = require('tailwindcss');
 const autoprefixer = require('autoprefixer');
 const cssnano = require('cssnano');
 const sass = require('gulp-sass')(require('sass'));
+const typescript = require('gulp-typescript');
+
+/////////////////////////////////////////////////////////////////////////////
+
+const destRoot = 'dist';
 
 /////////////////////////////////////////////////////////////////////////////
 
 let tsProject;
 
 function taskTypescript() {
-    !tsProject && (tsProject = ts.createProject('tsconfig.json'));
+    !tsProject && (tsProject = typescript.createProject('tsconfig.json'));
     return tsProject
         .src()
         .pipe(tsProject())
-        .pipe(gulp.dest(rootDest));
+        .pipe(gulp.dest(destRoot));
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -33,7 +38,7 @@ const paths = {
 };
 
 gulp.task("copy-html", function () {
-    return gulp.src(paths.pages).pipe(gulp.dest("dist"));
+    return gulp.src(paths.pages).pipe(gulp.dest(destRoot));
 });
 
 /////////////////////////////////////////////////////////////////////////////
