@@ -5,6 +5,15 @@ const autoprefixer = require('autoprefixer');
 const cssnano = require('cssnano');
 const sass = require('gulp-sass')(require('sass'));
 
+function pipeTraceTask() {
+    return through(function transform(file, enc, callback) {
+        console.log('trace task filename:', file.basename);
+        callback(null, file);
+    });
+}
+
+/////////////////
+
 var paths = {
     pages: ["src/*.html"],
 };
@@ -12,6 +21,8 @@ var paths = {
 gulp.task("copy-html", function () {
     return gulp.src(paths.pages).pipe(gulp.dest("dist"));
 });
+
+///////////
 
 // Run:
 // gulp sass
