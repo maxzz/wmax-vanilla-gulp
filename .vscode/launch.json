@@ -12,12 +12,13 @@
             //     "<node_internals>/**"
             // ],
             "program": "${workspaceRoot}/node_modules/gulp/bin/gulp.js",
-            "runtimeArgs": [
-                "--nolazy"
-            ],
+            // "runtimeArgs": [
+            //     "--nolazy"
+            // ],
             "cwd": "${workspaceRoot}",
             "args": [
-                "ts"
+                // "ts",
+                "clean",
             ]
             //"program": "${workspaceFolder}\\gulpfile.js"
         }
