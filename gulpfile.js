@@ -1,4 +1,5 @@
 const gulp = require('gulp');
+const del = require('del');
 const postcss = require('gulp-postcss');
 const tailwindcss = require('tailwindcss');
 const autoprefixer = require('autoprefixer');
@@ -15,8 +16,13 @@ const paths = {
     pages: ["src/*.html"],
     src: 'src',
     dest: 'dist',
+    sass: './scss/*.scss',
     tsConfig: null,
 };
+
+/////////////////////////////////////////////////////////////////////////////
+
+const clean = () => del(['dist']);
 
 /////////////////////////////////////////////////////////////////////////////
 
@@ -32,7 +38,7 @@ function taskTypescript() {
 
 function pipeTraceTask() {
     return through(function transform(file, enc, callback) {
-        console.log('trace task filename:', file.basename);
+        console.log('through filename:', file.basename);
         callback(null, file);
     });
 }
@@ -47,7 +53,7 @@ gulp.task("copy-html", function () {
 
 function compileSass() {
     const processors = [tailwindcss,];
-    return gulp.src('./scss/*.scss')
+    return gulp.src(paths.sass)
         .pipe(sass().on('error', sass.logError))
         .pipe(postcss(processors))
         .pipe(gulp.dest('./css'));
@@ -55,7 +61,7 @@ function compileSass() {
 
 gulp.task('compile-sass-prod', function () {
     const processors = [tailwindcss, autoprefixer, cssnano];
-    return gulp.src('./scss/*.scss')
+    return gulp.src(paths.sass)
         .pipe(sass().on('error', sass.logError))
         .pipe(postcss(processors))
         .pipe(gulp.dest('./css'));
@@ -75,11 +81,11 @@ const server = () => {
             baseDir: 'dist',
         }
     });
-}
+};
 
 const watch = () => {
-    gulp.watch('./scss/*.scss', gulp.series(compileSass));
-}
+    gulp.watch(paths.sass, gulp.series(compileSass));
+};
 
 /////////////////////////////////////////////////////////////////////////////
 
