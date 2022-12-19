@@ -4,7 +4,10 @@ const tailwindcss = require('tailwindcss');
 const autoprefixer = require('autoprefixer');
 const cssnano = require('cssnano');
 const sass = require('gulp-sass')(require('sass'));
+
 const typescript = require('gulp-typescript');
+
+const sync = require('browser-sync');
 
 /////////////////////////////////////////////////////////////////////////////
 
@@ -43,13 +46,13 @@ gulp.task("copy-html", function () {
 
 /////////////////////////////////////////////////////////////////////////////
 
-gulp.task('compile-sass', function () {
+function compileSass() {
     const processors = [tailwindcss,];
     return gulp.src('./scss/*.scss')
         .pipe(sass().on('error', sass.logError))
         .pipe(postcss(processors))
         .pipe(gulp.dest('./css'));
-});
+}
 
 gulp.task('compile-sass-prod', function () {
     const processors = [tailwindcss, autoprefixer, cssnano];
@@ -62,6 +65,22 @@ gulp.task('compile-sass-prod', function () {
 gulp.task('watch', function () {
     gulp.watch("./**/*.scss", gulp.series('compile-sass-prod'));
 });
+
+/////////////////////////////////////////////////////////////////////////////
+
+const server = () => {
+    sync.init({
+        ui: false,
+        notify: false,
+        server: {
+            baseDir: 'dist',
+        }
+    });
+}
+
+const watch = () => {
+    gulp.watch('./scss/*.scss', gulp.series(compileSass));
+}
 
 /////////////////////////////////////////////////////////////////////////////
 
