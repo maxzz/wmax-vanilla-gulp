@@ -1,5 +1,5 @@
+const fs = require('fs');
 const gulp = require('gulp');
-const del = require('del');
 const postcss = require('gulp-postcss');
 const tailwindcss = require('tailwindcss');
 const autoprefixer = require('autoprefixer');
@@ -23,7 +23,7 @@ const paths = {
 /////////////////////////////////////////////////////////////////////////////
 
 const clean = () => {
-    del.sync([paths.dest]);
+    return fs.rm(paths.dest, { force: true, recursive: true });
 };
 
 exports.clean = clean;
