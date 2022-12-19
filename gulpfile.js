@@ -9,10 +9,13 @@ const sass = require('gulp-sass')(require('sass'));
 const typescript = require('gulp-typescript');
 
 const sync = require('browser-sync');
+const server = sync.create();
+
+const IS_DEV_TASK = process.argv.includes('dev') || process.argv.includes('--dev');
 
 /////////////////////////////////////////////////////////////////////////////
 
-const paths = {
+const config = {
     pages: ["src/*.html"],
     src: 'src',
     dest: 'dist',
@@ -23,7 +26,7 @@ const paths = {
 /////////////////////////////////////////////////////////////////////////////
 
 const clean = () => {
-    return fs.rm(paths.dest, { force: true, recursive: true });
+    return fs.rm(config.dest, { force: true, recursive: true });
 };
 
 exports.clean = clean;
@@ -31,11 +34,11 @@ exports.clean = clean;
 /////////////////////////////////////////////////////////////////////////////
 
 function taskTypescript() {
-    !paths.tsConfig && (paths.tsConfig = typescript.createProject('tsconfig.json'));
-    return paths.tsConfig
+    !config.tsConfig && (config.tsConfig = typescript.createProject('tsconfig.json'));
+    return config.tsConfig
         .src()
-        .pipe(paths.tsConfig())
-        .pipe(gulp.dest(paths.dest));
+        .pipe(config.tsConfig())
+        .pipe(gulp.dest(config.dest));
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -49,35 +52,38 @@ function pipeTraceTask() {
 
 /////////////////////////////////////////////////////////////////////////////
 
-gulp.task("copy-html", function () {
-    return gulp.src(paths.pages).pipe(gulp.dest(paths.dest));
-});
+function copyHtml() {
+    return gulp.src(config.pages).pipe(gulp.dest(config.dest));
+}
 
 /////////////////////////////////////////////////////////////////////////////
 
-function compileSass() {
+function taskCompileSass() {
     const processors = [tailwindcss,];
-    return gulp.src(paths.sass)
+    return gulp
+        .src(config.sass)
         .pipe(sass().on('error', sass.logError))
         .pipe(postcss(processors))
         .pipe(gulp.dest('./css'));
 }
 
-gulp.task('compile-sass-prod', function () {
+function taskCompileSassProd() {
     const processors = [tailwindcss, autoprefixer, cssnano];
-    return gulp.src(paths.sass)
+    return gulp
+        .src(config.sass)
         .pipe(sass().on('error', sass.logError))
         .pipe(postcss(processors))
         .pipe(gulp.dest('./css'));
-});
-
-gulp.task('watch', function () {
-    gulp.watch("./**/*.scss", gulp.series('compile-sass-prod'));
-});
+}
 
 /////////////////////////////////////////////////////////////////////////////
 
-const server = () => {
+const reload = (done) => {
+    server.reload();
+    done();
+};
+
+const serve = (done) => {
     sync.init({
         ui: false,
         notify: false,
@@ -85,12 +91,20 @@ const server = () => {
             baseDir: 'dist',
         }
     });
+    done();
 };
 
 const watch = () => {
-    gulp.watch(paths.sass, gulp.series(compileSass));
+    gulp.watch('./src/*.ts', gulp.series(taskTypescript, reload));
+    gulp.watch(config.sass, gulp.series(taskCompileSass, reload));
 };
+
+const dev = gulp.series(serve, watch);
 
 /////////////////////////////////////////////////////////////////////////////
 
 exports.ts = taskTypescript;
+exports.copyHtml = copyHtml;
+exports.sass = taskCompileSass;
+
+exports.default = dev;
