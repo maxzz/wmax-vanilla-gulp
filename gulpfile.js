@@ -1,14 +1,15 @@
-const gulp = require('gulp');
-const del = require('del');
-const postcss = require('gulp-postcss');
-const tailwindcss = require('tailwindcss');
-const autoprefixer = require('autoprefixer');
-const cssnano = require('cssnano');
-const sass = require('gulp-sass')(require('sass'));
+const gulp = import('gulp');
+const del = import('del');
+const postcss = import('gulp-postcss');
+const tailwindcss = import('tailwindcss');
+const autoprefixer = import('autoprefixer');
+const cssnano = import('cssnano');
+const sassRaw = import('sass');
+const sass = require('gulp-sass')(sassRaw);
 
-const typescript = require('gulp-typescript');
+const typescript = import('gulp-typescript');
 
-const sync = require('browser-sync');
+const sync = import('browser-sync');
 
 /////////////////////////////////////////////////////////////////////////////
 
@@ -22,7 +23,9 @@ const paths = {
 
 /////////////////////////////////////////////////////////////////////////////
 
-const clean = () => del(['dist']);
+const clean = () => {
+    del([paths.dest])
+};
 
 /////////////////////////////////////////////////////////////////////////////
 
