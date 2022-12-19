@@ -11,18 +11,21 @@ const sync = require('browser-sync');
 
 /////////////////////////////////////////////////////////////////////////////
 
-const destRoot = 'dist';
+const paths = {
+    pages: ["src/*.html"],
+    src: 'src',
+    dest: 'dist',
+    tsConfig: null,
+};
 
 /////////////////////////////////////////////////////////////////////////////
 
-let tsProject;
-
 function taskTypescript() {
-    !tsProject && (tsProject = typescript.createProject('tsconfig.json'));
-    return tsProject
+    !paths.tsConfig && (paths.tsConfig = typescript.createProject('tsconfig.json'));
+    return paths.tsConfig
         .src()
-        .pipe(tsProject())
-        .pipe(gulp.dest(destRoot));
+        .pipe(paths.tsConfig())
+        .pipe(gulp.dest(paths.dest));
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -36,12 +39,8 @@ function pipeTraceTask() {
 
 /////////////////////////////////////////////////////////////////////////////
 
-const paths = {
-    pages: ["src/*.html"],
-};
-
 gulp.task("copy-html", function () {
-    return gulp.src(paths.pages).pipe(gulp.dest(destRoot));
+    return gulp.src(paths.pages).pipe(gulp.dest(paths.dest));
 });
 
 /////////////////////////////////////////////////////////////////////////////
